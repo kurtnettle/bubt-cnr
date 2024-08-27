@@ -1,4 +1,4 @@
-name: BUBT CNR Tasks
+name: Update Exam Routines
 
 on:
   schedule:
@@ -21,3 +21,9 @@ jobs:
       - name: checking for new exam routines
         run: |
           python -m bubt_cnr -examroutine
+        shell: bash
+      - name: pushing commits (if neccessary)
+        run: |          
+          chmod +x commit.sh
+          ./commit.sh
+        shell: bash

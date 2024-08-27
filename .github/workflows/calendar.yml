@@ -1,4 +1,4 @@
-name: BUBT CNR Tasks
+name: Update Calendar
 
 on:
   schedule:
@@ -22,3 +22,9 @@ jobs:
       - name: checking for new calendar
         run: |
           python -m bubt_cnr -calendar
+        shell: bash
+      - name: pushing commits (if neccessary)
+        run: |          
+          chmod +x commit.sh
+          sh commit.sh
+        shell: bash

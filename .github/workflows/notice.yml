@@ -1,4 +1,4 @@
-name: BUBT CNR Tasks
+name: Update Notices
 
 on:
   schedule:
@@ -22,3 +22,9 @@ jobs:
       - name: checking for new notices
         run: |
           python -m bubt_cnr -notice
+        shell: bash
+      - name: pushing commits (if neccessary)
+        run: |          
+          chmod +x commit.sh
+          sh commit.sh
+        shell: bash
