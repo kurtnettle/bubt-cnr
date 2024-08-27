@@ -18,6 +18,9 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install -r requirements.txt
+      - name: fetching LFS files
+        run: | 
+          git lfs pull         
       - name: checking for new exam routines
         run: |
           python -m bubt_cnr -examroutine

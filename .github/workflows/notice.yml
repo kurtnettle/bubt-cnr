@@ -19,6 +19,9 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install -r requirements.txt
+      - name: fetching LFS files
+        run: | 
+          git lfs pull    
       - name: checking for new notices
         run: |
           python -m bubt_cnr -notice
