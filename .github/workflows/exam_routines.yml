@@ -2,7 +2,8 @@ name: Update Exam Routines
 
 on:
   schedule:
-    - cron: "0 3-19 * * *" # 16 checks
+    - cron: "0 3-19/4 * * *" # 5 checks
+    # - cron: "0 3-19 * * *" # 16 checks
   workflow_dispatch:    
 
 permissions:

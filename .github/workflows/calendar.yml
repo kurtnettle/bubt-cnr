@@ -2,8 +2,9 @@ name: Update Calendar
 
 on:
   schedule:
-    - cron: "0 3-9 * * *" # 6 checks
-    - cron: "0 10-18/2 * * *" # 4 checks
+    - cron: "0 0 * * *" # 1 checks
+    # - cron: "0 3-9 * * *" # 6 checks
+    # - cron: "0 10-18/2 * * *" # 4 checks
   workflow_dispatch:    
 
 permissions:

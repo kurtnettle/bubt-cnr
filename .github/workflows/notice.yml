@@ -2,8 +2,9 @@ name: Update Notices
 
 on:
   schedule:
-    - cron: "*/30 02-18 * * *" # 32 checks
-    - cron: "0 19-23 * * *" # 4 checks
+    - cron: "0 3-19/4 * * *" # 5 checks
+    # - cron: "*/40 02-18 * * *" # 24 checks
+    # - cron: "0 19-23/2 * * *" # 2 checks
   workflow_dispatch:    
 
 permissions:
