@@ -35,25 +35,27 @@ class ExamRoutine:
         for cell in cells:
             tds = cell.select("td")
             day = tds[0].text.lower().replace("program", "").strip()
-            link = check_n_fix_link(tds[1].select("a")[0]["href"])
 
-            if "day" in day:
-                is_day = True
-                prog_dir = root_prog_dir / "day"
-            else:
-                is_day = False
-                prog_dir = root_prog_dir / "evn"
+            links = tds[1].select("a")
+            for link in links:
+                link = check_n_fix_link(link["href"])
+                if "day" in day:
+                    is_day = True
+                    prog_dir = root_prog_dir / "day"
+                else:
+                    is_day = False
+                    prog_dir = root_prog_dir / "evn"
 
-            prog_dir.mkdir(parents=True, exist_ok=True)
-            data = ExamRoutineData(
-                shift_name=shift_name,
-                is_day=is_day,
-                link=link,
-                prog_dir=prog_dir,
-                db_tb_name=db_tb_name,
-            )
+                prog_dir.mkdir(parents=True, exist_ok=True)
+                data = ExamRoutineData(
+                    shift_name=shift_name,
+                    is_day=is_day,
+                    link=link,
+                    prog_dir=prog_dir,
+                    db_tb_name=db_tb_name,
+                )
 
-            prog_rtn_urls.append(data)
+                prog_rtn_urls.append(data)
 
         return prog_rtn_urls
 
