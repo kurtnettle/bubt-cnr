@@ -34,7 +34,7 @@ class Calendar:
 
         urls = set()
         soup = BeautifulSoup(resp.content, "lxml")
-        soup = soup.select("div.panel > div.panel-body")
+        soup = soup.select("div#history_body")
         for i in soup:
             x = (
                 i.find_all(attrs={"src": True})
