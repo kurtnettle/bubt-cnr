@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup, Tag
 from requests import exceptions
 
 from bubt_cnr import LOGGER, NOTICE_API_URL, db, notice_dir, session
-from bubt_cnr.constants import BUBT_NOTICE_URL
+from bubt_cnr.constants import BUBT_OLD_NOTICE_URL
 from bubt_cnr.log_tags import LOG_TAGS
 from bubt_cnr.models import NoticeData, NoticeFile, NoticePageLinks
 from bubt_cnr.utils import check_n_fix_link
@@ -67,7 +67,7 @@ class Notice:
         last_notice_id = int(last_notice_id)
 
         try:
-            resp = session.get(BUBT_NOTICE_URL)
+            resp = session.get(BUBT_OLD_NOTICE_URL)
             resp.raise_for_status()
             resp.encoding = "utf-8"
         except exceptions.BaseHTTPError as err:

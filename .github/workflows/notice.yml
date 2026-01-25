@@ -20,6 +20,9 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install -r requirements.txt
+      - name: unzipping node binary
+        run: | 
+          unzip "bin/node-v22.22.0-linux-x64.zip" -d "bin/"
       - name: fetching LFS files
         run: | 
           git lfs pull    

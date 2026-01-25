@@ -1,7 +1,8 @@
 # URLS
 BUBT_BASE_URL = "https://classic.bubt.edu.bd"
 BUBT_CALENDAR_URL = "https://classic.bubt.edu.bd/Home/page_details/Academic_Calender"
-BUBT_NOTICE_URL = "https://classic.bubt.edu.bd/Home/all_notice"
+BUBT_NOTICE_URL = "https://bubt.edu.bd/notice"
+BUBT_OLD_NOTICE_URL = "https://classic.bubt.edu.bd/Home/all_notice"
 BUBT_ROUTINE_URL = "https://classic.bubt.edu.bd/home/routines"
 
 # FOLDERS
@@ -14,3 +15,4 @@ SUPP_EXAM_DIR = "supp_exam"
 
 # FILES
 DB_NAME = "data.db"
+NODE_PATH="bin/node-v22.22.0-linux-x64"

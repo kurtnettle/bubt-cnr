@@ -5,6 +5,7 @@ from bubt_cnr import LOG_TAGS
 from bubt_cnr.calendar import Calendar
 from bubt_cnr.exam_routine import ExamRoutine
 from bubt_cnr.notice import Notice
+from bubt_cnr.noticesV2 import NoticeV2
 
 LOG_TAG = LOG_TAGS.APP
 
@@ -26,7 +27,7 @@ if __name__ == "__main__":
 
     if args.notice:
         sleep(cooldown)
-        Notice().update()
+        NoticeV2().update()
         cooldown = 2
 
     if args.examroutine:
