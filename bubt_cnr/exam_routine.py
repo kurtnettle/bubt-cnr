@@ -21,7 +21,7 @@ class ExamRoutine:
     def get_exam_urls(self, soup, exam_type) -> list[ExamRoutineData]:
         if exam_type == "term":
             shift_name = "term"
-            selector = "div#Exam_Routine tbody tr"
+            selector = "table:nth-child(2) tbody tr"
             root_prog_dir = exam_dir
             db_tb_name = "term_exams"
         else:
@@ -34,12 +34,11 @@ class ExamRoutine:
         cells = soup.select(selector)
         for cell in cells:
             tds = cell.select("td")
-            day = tds[0].text.lower().replace("program", "").strip()
-
-            links = tds[1].select("a")
+            day = tds[1].select_one("span:nth-child(1)").text.lower().strip()
+            links = tds[2].select("a")
             for link in links:
                 link = check_n_fix_link(link["href"])
-                if "day" in day:
+                if "evening" not in day:
                     is_day = True
                     prog_dir = root_prog_dir / "day"
                 else:
