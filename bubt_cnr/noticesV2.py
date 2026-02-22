@@ -380,8 +380,12 @@ class NoticeV2:
             created_at = raw_notice["created_at"]
             cat_name = raw_notice["category"]["name"]
 
-            desc = raw_notice["description"]
-            soup = BeautifulSoup(desc, "lxml")
+            desc = raw_notice.get("description")
+            if desc:
+                soup = BeautifulSoup(desc, "lxml")
+                content = soup.text
+            else:
+                content = "" 
 
             link = "https://bubt.edu.bd/notice/details/" + raw_notice["slug"]
             file_link = None
@@ -395,7 +399,7 @@ class NoticeV2:
                 n_title=title,
                 n_cat=cat_name,
                 n_date=created_at,
-                n_content=soup.text,
+                n_content=content,
                 n_file=file_link,
             )
         except KeyError as e:
