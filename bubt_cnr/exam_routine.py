@@ -18,7 +18,94 @@ LOG_TAG = LOG_TAGS.EXAM_ROUTINE
 
 
 class ExamRoutine:
-    def get_exam_urls(self, soup, exam_type) -> list[ExamRoutineData]:
+    def get_exam_urls(self, soup) -> list[ExamRoutineData]:
+        prog_rtn_urls = []
+
+        if not soup:
+            LOGGER.error("[%s] No soup object provided", LOG_TAG)
+            return []
+
+        tables = soup.select("table")
+
+        exam_table = None
+        for table in tables:
+            x = table.find_previous_sibling("h2")
+            if "exam" in x.text.lower():
+                exam_table = table
+                break
+
+        if not exam_table:
+            LOGGER.error("[%s] No exam table found", LOG_TAG)
+            return []
+
+        tb_rows = exam_table.select("tbody > tr")
+        for idx, row in enumerate(tb_rows):
+            tds = row.select("td")
+            if len(tds) < 3:
+                LOGGER.debug(
+                    "[%s] Row %d has insufficient cells: %d", LOG_TAG, idx, len(tds)
+                )
+                print(tds)
+                continue
+
+            name_element = tds[1].select_one("span")
+            if not name_element:
+                LOGGER.error("[%s] Name span not found in row %d", LOG_TAG, idx)
+                continue
+            name = name_element.get_text(strip=True)
+
+            link_element = tds[2].select_one("a")
+            if not link_element:
+                LOGGER.error("[%s] Link not found for program <%s>", LOG_TAG, name)
+                continue
+
+            link = link_element.get("href")
+            if not link:
+                LOGGER.error("[%s] Empty href for program <%s>", LOG_TAG, name)
+                continue
+
+            fixed_link = check_n_fix_link(link)
+            if not fixed_link:
+                LOGGER.error("[%s] Invalid link after fix: <%s>", LOG_TAG, link)
+                continue
+
+            if not fixed_link:
+                LOGGER.error("[%s] invalid link found <%s>", LOG_TAG, link)
+                continue
+
+            lowered_name = name.lower()
+
+            suppli_keywords = ["supplementary", "suppli", "supply", "supplement"]
+            if any(keyword in lowered_name for keyword in suppli_keywords):
+                shift_name = "suppli"
+                root_prog_dir = supp_exam_dir
+                db_tb_name = "suppli_exams"
+            else:
+                shift_name = "term"
+                root_prog_dir = exam_dir
+                db_tb_name = "term_exams"
+
+            if "evening" in lowered_name:
+                is_day = False
+                prog_dir = root_prog_dir / "evn"
+            else:
+                is_day = True
+                prog_dir = root_prog_dir / "day"
+
+            prog_dir.mkdir(parents=True, exist_ok=True)
+            data = ExamRoutineData(
+                shift_name=shift_name,
+                is_day=is_day,
+                link=fixed_link,
+                prog_dir=prog_dir,
+                db_tb_name=db_tb_name,
+            )
+
+            prog_rtn_urls.append(data)
+
+        return prog_rtn_urls
+
+    def get_exam_urls_old(self, soup, exam_type) -> list[ExamRoutineData]:
         if exam_type == "term":
             shift_name = "term"
             selector = "table:nth-child(2) tbody tr"
@@ -63,7 +150,7 @@ class ExamRoutine:
     # comparing the changes of db with current one
     # then
     # update records if neccessary
-    def download(self, exam_data: ExamRoutineData) -> tuple[str,File]:
+    def download(self, exam_data: ExamRoutineData) -> tuple[str, File]:
         try:
             resp = session.get(exam_data.link)
             resp.raise_for_status()
@@ -156,8 +243,8 @@ class ExamRoutine:
             return
 
         exam_types = [
-            self.get_exam_urls(soup, "term"),
-            self.get_exam_urls(soup, "suppli"),
+            self.get_exam_urls(soup),
+            self.get_exam_urls(soup),
         ]
 
         if not exam_types[0] and not exam_types[1]:
